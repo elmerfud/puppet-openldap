@@ -1,0 +1,26 @@
+database ldap
+
+suffix "<%= @suffix -%>"
+<% uri.each do | url | -%>
+uri     "<%= url -%>"
+<% end -%>
+
+rebind-as-user
+lastmod   off
+chase-referrals yes
+
+acl-bind
+<% acl_bind.each do | acl | -%>
+        <%= acl %> 
+<% end -%>
+idassert-bind
+<% idassert_bind.each do | idassert | -%>
+        <%= idassert %>
+<% end -%>
+idassert-authzFrom   <%= idassert_autzFrom %>
+
+overlay <%= overlay %>
+<% overlay_maps.each do | olmap | -%>
+<%= olmap %> 
+<% end -%>
+

@@ -1,0 +1,45 @@
+<% if @schema -%>
+<% schema.each do |schema_file| -%>
+<% if schema_file[-6,6] == 'schema' -%>
+include         /etc/openldap/schema/<%= schema_file %>
+<% end -%>
+<% end -%>
+<% end -%>
+
+loglevel <%= scope.lookupvar('openldap::params::loglevel') %> 
+
+allow <%= scope.lookupvar('openldap::params::allow') %>
+
+<% if @sasl_host -%>
+sasl-host <%= @sasl_host %>
+<% end -%>
+<% if @sasl_realm -%>
+sasl-realm <%= @sasl_realm %>
+<% end -%>
+
+pidfile         <%= scope.lookupvar('openldap::params::pidfile') %>
+argsfile        <%= scope.lookupvar('openldap::params::argsfile') %>
+
+modulepath      /usr/lib64/openldap
+
+tool-threads 2
+
+#TLSCipherSuite HIGH:MEDIUM:+SSLv2
+#TLSCACertificatePath /etc/ssl/certs/
+#TLSCertificateFile /etc/ssl/ldap1.aln.seo.lightedge.com.crt
+#TLSCertificateKeyFile /etc/ssl/private/ldap1.aln.seo.lightedge.com.key
+#TLSVerifyClient demand
+
+access to attrs=userPassword
+        by anonymous auth
+        by * none
+
+access to attrs=sambaLMPassword,sambaNTPassword,sambaAcctFlags,sambaPwdLastSet,sambaPwdCanChange,sambaPwdMustChange
+        by * none
+
+access to *
+        by * read
+
+access to dn.base=""
+        by * read
+
