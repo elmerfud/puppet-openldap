@@ -1,13 +1,19 @@
 class openldap::params {
 
+  $conf_file = '/etc/openldap/slapd.conf'
+
   $conf_temp_dir = '/tmp/openldap'
 
   $server_type = 'slave'
 
-  $schema = ['core.schema', 
-             'cosine.schema', 
-             'nis.schema',  
-             'inetorgperson.schema', 
+  $schema = ['core.schema',
+             'core.ldif', 
+             'cosine.schema',
+             'cosine.ldif', 
+             'nis.schema', 
+             'nis.ldif', 
+             'inetorgperson.schema',
+             'inetorgperson.ldif', 
              'samba3.schema', 
              'lockfile.schema', 
              'yast.schema', 
@@ -22,5 +28,7 @@ class openldap::params {
 
   $ldap_user = 'ldap'
   $ldap_group = 'ldap'
+
+  $service_name = 'slapd'
 
 }

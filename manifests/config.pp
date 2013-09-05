@@ -5,33 +5,39 @@ class openldap::config (
   $sasl_host = undef
 ) inherits openldap::params {
 
-  file {
-    "${schema}":
-      ensure => present,
-      mode => 0644,
-      path => "/etc/openldap/schema/${name}",
-      source => "puppet://modules/openldap/schema/${name}",
-      require => Class['openldap::package']; 
+
+  openldap::schema_file { 
+    $schema: 
   }
 
   file {
     "${openldap::params::conf_temp_dir}":
       ensure => directory,
       purge => true,
-      recurse => true
+      recurse => true,
       mode => 700,
       owner => 'root',
       group => 'root';
   }
 
   file {
-    "${openldap::params::conf_temp_dir}/slapd_header.conf":
+    "${openldap::params::conf_temp_dir}/aaaa_slapd_header.conf":
       ensure => file,
       mode => 700,
       owner => 'root',
       group => 'root',
       content => template('openldap/slapd_header.erb'),
-      require => File[${openldap::params::conf_temp_dir}];
+      require => File["${openldap::params::conf_temp_dir}"];
+  }
+
+  file {
+    "${openldap::params::conf_temp_dir}/zzzz_slapd_footer.conf":
+      ensure => file,
+      mode => 700,
+      owner => 'root',
+      group => 'root',
+      content => template('openldap/slapd_footer.erb'),
+      require => File["${openldap::params::conf_temp_dir}"];
   }
 
 }
